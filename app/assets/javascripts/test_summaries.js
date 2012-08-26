@@ -16,7 +16,11 @@ jQuery(function($){
 
         var y = d3.scale.linear().range([0, height - 40]);
 
-        var svg = d3.select("#chart").append("svg")
+        var color = d3.scale.linear()
+            .domain([0, 10])
+            .range(["#2B151C", "#73404E"]);
+
+var svg = d3.select("#chart").append("svg")
             .attr("width", width)
             .attr("height", height)
             .style("padding-right", "30px")
@@ -60,13 +64,14 @@ jQuery(function($){
      var results = body.selectAll("g")
       .data(x_points)
       .enter().append("g")
-      .attr("transform", function(d) {
-          return "translate(" + x(report.data.length-d) + ",0)"; });
-    results.selectAll("rect")
+      .attr("fill", color ).attr("transform", function(d) {
+          return "translate(" + x(report.data.length-d -1) + ",0)"; });
+
+       results.selectAll("rect")
       .data(d3.range(2))
     .enter().append("rect")
       .attr("x", 1)
-      .attr("width", x(1))
+      .attr("width", x(1) - 2)
       .attr("height", 0);
 
     results.selectAll("rect")

@@ -13,7 +13,7 @@
   }
 
   .rule line {
-    stroke: #000;
+    stroke: #fff;
     stroke-opacity: .2;
     shape-rendering: crispEdges;
   }
@@ -25,10 +25,10 @@
 
   rect {
     fill-opacity: .6;
-    fill: #e377c2;
+   
   }
 
   rect:first-child {
-    fill: #1f77b4;
+    
   }
 }
