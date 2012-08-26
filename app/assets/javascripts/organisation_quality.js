@@ -38,21 +38,21 @@ jQuery(function($){
                  .attr("r", 0)
                  .transition().duration(1250)
                  .attr("r", function(d) { return d.r; })
-                 .style("fill", function(d) { return fill(d.name); });
+                 .style("fill", function(d) { return fill(d.package_name); });
 
         node.append("circle")
             .attr("class", "inner")
             .attr("r", 0)
             .transition().duration(2500)
             .attr("r", function(d) {  return d.r * (d.passed/d.total); })
-            .style("fill", function(d) { return fill(d.name); });
+            .style("fill", function(d) { return fill(d.package_name); });
 
         node.append("text")
             .style("opacity", 0.0)
             .transition().duration(1000).style("opacity", 0.9)
             .attr("text-anchor", "right")
             .attr("dy", ".3em")
-            .text(function(d) { return d.name.substring(0, d.r / 3); });
+            .text(function(d) { return d.package_name.substring(0, d.r / 3); });
     };
     jQuery.getJSON(window.endpoint_url +"?&callback=?", function(data){
 
