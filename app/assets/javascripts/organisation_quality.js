@@ -21,6 +21,12 @@ jQuery(function($){
             .attr("height", h)
             .attr("class", "bubble");
 
+        var title = vis.append("text")
+            .attr("class", "title")
+            .attr("dy", ".71em")
+            .attr("transform", "translate(10, 10)")
+            .text("Organisational data quality");
+
          var node = vis.selectAll("g.node")
             .data(bubble.nodes(data))
             .enter().append("g")
@@ -29,15 +35,22 @@ jQuery(function($){
             .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
 
             node.append("circle")
+                 .attr("r", 0)
+                 .transition().duration(1250)
                  .attr("r", function(d) { return d.r; })
                  .style("fill", function(d) { return fill(d.name); });
 
         node.append("circle")
             .attr("class", "inner")
+            .attr("r", 0)
+            .transition().duration(2500)
             .attr("r", function(d) {  return d.r * (d.passed/d.total); })
             .style("fill", function(d) { return fill(d.name); });
+
         node.append("text")
-            .attr("text-anchor", "middle")
+            .style("opacity", 0.0)
+            .transition().duration(1000).style("opacity", 0.9)
+            .attr("text-anchor", "right")
             .attr("dy", ".3em")
             .text(function(d) { return d.name.substring(0, d.r / 3); });
     };
