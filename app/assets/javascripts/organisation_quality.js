@@ -1,6 +1,6 @@
 jQuery(function($){
     // hack
-    if($("#test_summaries").length == 0){
+    if($("#organisation_quality").length == 0){
         return;
     }
     var show_aggregated_test_results = function(report){

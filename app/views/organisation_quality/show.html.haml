@@ -1,9 +1,8 @@
 %script
   endpoint_url= "#{request[:endpoint_url]}" 
 %ul.nav.nav-tabs                                                                                                                                
-  %li.active  
-    %a All test results
-  %li
+  %li  
+    %a{:href=>url_for(:test_summaries)+"?endpoint_url=#{request[:endpoint_url]}"} All test results
+  %li.active
     %a{:href=>url_for(:organisation_quality)+ "?endpoint_url=#{request[:endpoint_url]}"} Organisation quality
-#test_summaries
-  #chart
+#organisation_quality

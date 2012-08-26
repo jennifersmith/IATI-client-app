@@ -1,0 +1,2 @@
+class OrganisationQualityController < ApplicationController
+end
