@@ -1,2 +1,4 @@
-%h1 Home#index
-%p Find me in app/views/home/index.html.haml
+%p Enter the API url
+= form_tag(url_for(:report_summary),:method=>:get) do
+   = text_field_tag(:endpoint_url)
+   = submit_tag("GO")
