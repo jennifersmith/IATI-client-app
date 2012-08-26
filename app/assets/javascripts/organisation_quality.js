@@ -3,85 +3,46 @@ jQuery(function($){
     if($("#organisation_quality").length == 0){
         return;
     }
-    var show_aggregated_test_results = function(report){
+    var show_organisation_quality = function(report){
+        var data = {children : report}; // is "children" needed?
+        var h = 700, w = 1000
+        format = d3.format(",d"),
+        fill = d3.scale.category20c();
 
-        var x_points = [];
-        // hack as dont have 0, 1 , 2, to N
-        for(i=0; i < report.data.length; i++){
-            x_points.push(i);
-        }
-        var width = 960, height = 500;
+        var bubble = d3.layout.pack()
+            .sort(null)
+            .size([w, h])
+            .value(function(c){return c.total;})
+            .padding(20);
 
-        var x = d3.scale.linear().range([0, width]);
 
-        var y = d3.scale.linear().range([0, height - 40]);
+        var vis = d3.select("#chart").append("svg")
+            .attr("width", w)
+            .attr("height", h)
+            .attr("class", "bubble");
 
-        var color = d3.scale.linear()
-            .domain([0, 10])
-            .range(["#2B151C", "#73404E"]);
-
-var svg = d3.select("#chart").append("svg")
-            .attr("width", width)
-            .attr("height", height)
-            .style("padding-right", "30px")
-            .append("g")
-            .attr("transform", "translate(" + x(1) + "," + (height - 20) + ")scale(-1,-1)");
-        var body = svg.append("g").attr("transform", "translate(0,0)");
-        var rules = svg.append("g");
-        var title = svg.append("text")
-            .attr("class", "title")
-            .attr("dy", ".71em")
-            .attr("transform", "translate(" + x(1) + "," + y(1) + ")scale(-1,-1)")
-            .text("IATI Data Quality");
-        console.log(report);
-        y.domain([0, d3.max(report.data) + 20]);
-
-        x.domain([0, report.data.length]);
-        var rules = rules.selectAll(".rule")
-            .data(y.ticks(10))
+         var node = vis.selectAll("g.node")
+            .data(bubble.nodes(data))
             .enter().append("g")
-            .attr("class", "rule")
-            .attr("transform", function(d) { return "translate(0," + y(d) + ")"; });
+            .filter(function(d) { return !d.children;})
+            .attr("class", "node")
+            .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
 
-        rules.append("line")
-            .attr("x2", width);
+            node.append("circle")
+                 .attr("r", function(d) { return d.r; })
+                 .style("fill", function(d) { return fill(d.name); });
 
-     rules.append("text")
-            .attr("x", 6)
-            .attr("dy", ".35em")
-            .attr("transform", "rotate(180)")
-            .text(function(d) { return Math.round(d); });
-        svg.append("g").selectAll("text")
-      .data(x_points)
-            .enter().append("text")
+        node.append("circle")
+            .attr("class", "inner")
+            .attr("r", function(d) {  return d.r * (d.passed/d.total); })
+            .style("fill", function(d) { return fill(d.name); });
+        node.append("text")
             .attr("text-anchor", "middle")
-            .attr("transform", function(d) {
-               return "translate("+
-                    (x(report.data.length) - x(d) - x(0.5))
-                     + ",-4)scale(-1,-1)"; })
-            .attr("dy", ".71em")
-            .text(function(x){return report.x_axis[x][0] +  "-" + report.x_axis[x][1] + "%";} );
-     var results = body.selectAll("g")
-      .data(x_points)
-      .enter().append("g")
-      .attr("fill", color ).attr("transform", function(d) {
-          return "translate(" + x(report.data.length-d -1) + ",0)"; });
-
-       results.selectAll("rect")
-      .data(d3.range(2))
-    .enter().append("rect")
-      .attr("x", 1)
-      .attr("width", x(1) - 2)
-      .attr("height", 0);
-
-    results.selectAll("rect")
-            .data(function(d) { return [report.data[d]]; })
-      .transition()
-        .duration(1250)
-        .attr("height", y);
-       };
+            .attr("dy", ".3em")
+            .text(function(d) { return d.name.substring(0, d.r / 3); });
+    };
     jQuery.getJSON(window.endpoint_url +"?&callback=?", function(data){
 
-        show_aggregated_test_results(data.aggregated_test_results);
+        show_organisation_quality(data.results_by_org);
     });
 });
