@@ -1,4 +1,6 @@
 IATIClientApp::Application.routes.draw do
+  resources :test_summaries
+
   get "home/index"
 
   # The priority is based upon order of creation:

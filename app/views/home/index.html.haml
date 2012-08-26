@@ -1,4 +1,4 @@
 %p Enter the API url
-= form_tag(url_for(:report_summary),:method=>:get) do
+= form_tag(url_for(:test_summaries),:method=>:get) do
    = text_field_tag(:endpoint_url)
    = submit_tag("GO")
